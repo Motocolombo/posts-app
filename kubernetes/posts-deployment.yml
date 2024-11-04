@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  posts-app
+  labels:
+    app:  posts-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: posts-app
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app:  posts-app
+    spec:
+      containers:
+      - image:  hugodcs/app-posts:latest
+        name:  posts-app
+        resources:
+          requests:
+            cpu: 0.2
+            memory: 100Mi
+          limits:
+            cpu: 0.5
+            memory: 256Mi   
+        ports:
+        - containerPort:  3000
+          name:  posts-app
+      restartPolicy: Always
